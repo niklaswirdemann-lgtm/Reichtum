@@ -10,7 +10,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box }
-html { scroll-behavior: smooth; background: var(--ink) }
+html { scroll-behavior: smooth; background: var(--ink); scroll-padding-top: 80px; scroll-padding-bottom: calc(var(--mbar) + 16px) }
 body { margin: 0; background: var(--ink); color: var(--fg); font: 16px/1.6 var(--bf); overflow-x: clip }
 body.lock { overflow: hidden }
 a { color: inherit }
@@ -150,6 +150,27 @@ main { position: relative; z-index: 2 }
 .hrs td { text-align: right; color: var(--mu) }
 .hrs tr.today th, .hrs tr.today td { color: var(--ac) }
 @media (max-width: 480px) { .kg { grid-template-columns: 1fr } }
+
+/* request form */
+.fq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 14px; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--ln) }
+.fq h3 { grid-column: 1 / -1; font-size: 1.35rem }
+.fq .note { grid-column: 1 / -1; color: var(--mu); font-size: .85rem }
+.fq .full, .fq fieldset { grid-column: 1 / -1 }
+.fq fieldset { border: 0; padding: 0; margin: 4px 0 0; min-width: 0 }
+.fq legend { font-size: .85rem; color: var(--mu); margin-bottom: 8px; padding: 0 }
+.fq > label { display: flex; flex-direction: column; gap: 5px; font-size: .85rem; color: var(--mu); min-width: 0 }
+.fq input:not([type=checkbox]), .fq textarea { font: inherit; font-size: 1rem; color: var(--fg); background: rgba(0, 0, 0, .35); border: 1px solid var(--ln); border-radius: 2px; padding: 10px 12px; width: 100% }
+.fq textarea { resize: vertical; min-height: 84px }
+.fq input:focus-visible, .fq textarea:focus-visible { outline: 2px solid var(--ac); outline-offset: 1px }
+.fq .acts { margin-top: 4px }
+.chips { display: flex; flex-wrap: wrap; gap: 6px }
+.chips label { position: relative }
+.chips input { position: absolute; opacity: 0; width: 1px; height: 1px }
+.chips span { display: inline-block; padding: 6px 11px; border: 1px solid var(--ln); border-radius: 99px; cursor: pointer; font-size: .85rem; transition: border-color .2s, background .2s }
+.chips span:hover { border-color: rgba(138, 212, 255, .55) }
+.chips input:checked + span { border-color: var(--ac); background: rgba(138, 212, 255, .14); color: var(--ac) }
+.chips input:focus-visible + span { outline: 2px solid var(--ac); outline-offset: 2px }
+@media (max-width: 480px) { .fq { grid-template-columns: minmax(0, 1fr) } }
 
 /* legal */
 .lg { padding: 60px max(16px, env(safe-area-inset-right, 0px)) calc(120px + var(--mbar)) max(16px, env(safe-area-inset-left, 0px)); position: relative }

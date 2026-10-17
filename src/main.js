@@ -18,6 +18,23 @@ function updateStatus() {
   for (const tr of $$('.hrs tr[data-d]')) tr.classList.toggle('today', tr.dataset.d.split(',').map(Number).includes(s.day));
 }
 updateStatus();
+
+/* ---- request form: builds a WhatsApp / e-mail message, nothing is sent by the site ---- */
+const fq = $('#fq');
+if (fq) {
+  const val = (n) => fq.elements[n].value.trim();
+  fq.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const ls = $$('input[name=l]:checked', fq).map((x) => x.value);
+    if (!ls.length && !val('msg')) { $('#fqs').textContent = 'Bitte mindestens eine Leistung ankreuzen oder eine Nachricht schreiben.'; return; }
+    const subject = 'Anfrage' + (ls.length ? ': ' + ls.join(', ') : '') + (val('ort') ? ' in ' + val('ort') : '');
+    const body = ['Hallo Herr de Vries,', '', val('msg') || 'ich interessiere mich für Ihre Leistungen und bitte um Rückmeldung.', '',
+      'Leistung: ' + (ls.join(', ') || '-'), 'Ort: ' + (val('ort') || '-'), 'Rückruf unter: ' + (val('tel') || '-'), '', 'Viele Grüße', val('name')].join('\n');
+    if (e.submitter && e.submitter.dataset.via === 'mail') location.href = 'mailto:joerg.de.vries@ewetel.net?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    else window.open('https://wa.me/49493176265?text=' + encodeURIComponent(subject + '\n\n' + body), '_blank', 'noopener');
+    $('#fqs').textContent = 'Ihre Nachricht ist vorbereitet – bitte in WhatsApp bzw. Ihrem E-Mail-Programm noch absenden.';
+  });
+}
 setInterval(updateStatus, 30000);
 $('#yr').textContent = new Date().getFullYear();
 
