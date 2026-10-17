@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impressum – {{name}}</title>
+  <meta name="description" content="Impressum von {{name}}, {{street}}, {{zip}} {{city}}.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="{{siteUrl}}/impressum.html">
+  <meta name="theme-color" content="#07131f">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body class="legal-page">
+  <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+  <header class="site-header site-header--solid">
+    <div class="site-header__inner">
+      <a class="logo" href="./"><span class="logo__text">SegTeam <span>Norden</span></span></a>
+      <a class="btn btn--ghost btn--small" href="./">Zur Startseite</a>
+    </div>
+  </header>
+  <main id="inhalt" class="legal container container--narrow">
+    <h1>Impressum</h1>
+    <p class="badge-provisional" role="note"><strong>Platzhalter:</strong> Dieser Text muss vor dem Livegang vollständig geprüft und ergänzt werden.</p>
+    <h2>Angaben gemäß § 5 DDG</h2>
+    <p>{{name}}<br>[PRÜFEN: Inhaber/Rechtsform]<br>{{street}}<br>{{zip}} {{city}}</p>
+    <h2>Kontakt</h2>
+    <p>Telefon: {{phone}}<br>E-Mail: <a href="mailto:{{email}}">{{email}}</a></p>
+    <h2>Umsatzsteuer-ID</h2>
+    <p>[PRÜFEN: Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG, falls vorhanden]</p>
+    <h2>Verantwortlich für den Inhalt</h2>
+    <p>[PRÜFEN: Name, Anschrift wie oben]</p>
+    <h2>Verbraucherstreitbeilegung</h2>
+    <p>[PRÜFEN: Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.]</p>
+    <h2>Bildnachweise</h2>
+    <p>Alle Grafiken und die 3D-Szene sind eigene, programmatisch erzeugte Illustrationen.</p>
+  </main>
+  <footer class="site-footer"><div class="container site-footer__inner"><p class="site-footer__brand">{{name}}</p><ul role="list" class="site-footer__links"><li><a href="impressum.html" aria-current="page">Impressum</a></li><li><a href="datenschutz.html">Datenschutz</a></li></ul><p class="site-footer__copy">© {{year}} {{name}}</p></div></footer>
+</body>
+</html>
