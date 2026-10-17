@@ -150,7 +150,7 @@ export async function start(ui) {
         ? { p: V(c.x - L.side * 0.3, 2.4, c.z + L.dist * 1.55), l: V(c.x - L.side * 0.15, L.ly - 1.25, c.z) }
         : { p: V(c.x - L.side * 2.1, 1.75, c.z + L.dist), l: V(c.x - L.side * 1.75, L.ly, c.z) });
     }
-    poses.push(portrait ? { p: V(0.01, 44, -20.5), l: V(0, 0, -23.2) } : { p: V(-42, 36, -25), l: V(2, 0, -37) });
+    poses.push(portrait ? { p: V(0.01, 44, -20.5), l: V(0, 0, -23.2) } : { p: V(-50, 42, -27), l: V(2, 0, -40) });
   }
   function resize() {
     const w = innerWidth, h = innerHeight;
@@ -186,6 +186,7 @@ export async function start(ui) {
   }
 
   function setNight(n) {
+    wake();
     night = n;
     const bg = n ? 0x05070a : 0x1a2532;
     scene.background.set(bg); scene.fog.color.set(bg); fogBase = n ? 0.045 : 0.032;
@@ -199,12 +200,12 @@ export async function start(ui) {
   // ---- focus (tap on model) ----
   function focus(key, from) {
     const i = byKey[key]; if (i === undefined) return;
-    focusKey = key; focusScroll = scrollY;
+    focusKey = key; focusScroll = scrollY; wake(2500);
     const target = anchors[i + 1];
     if (Math.abs(scrollY - target) > innerHeight * 0.6) { scrollTo({ top: target, behavior: rm ? 'auto' : 'smooth' }); focusScroll = target; }
     ui.showCard(st[i].info, from);
   }
-  function unfocus() { if (!focusKey) return; focusKey = null; ui.hideCard(); }
+  function unfocus() { if (!focusKey) return; focusKey = null; wake(2500); ui.hideCard(); }
   function focusPose(i, outP, outL) {
     const m = st[i], L = m.L, c = L.pos.clone(); c.z += L.zc; c.y = m.size.h * 0.5;
     if (portrait) { outL.set(c.x, c.y - 0.75, c.z); outP.set(c.x, c.y + 0.4, c.z + L.dist * 0.95); } else { outL.set(c.x + 0.9, c.y, c.z); outP.set(c.x + 0.9, c.y + 0.4, c.z + L.dist * 0.88); }
@@ -231,6 +232,9 @@ export async function start(ui) {
     addEventListener('mousemove', (e) => { par.x = e.clientX / innerWidth - 0.5; par.y = e.clientY / innerHeight - 0.5; }, { passive: true });
     setInterval(() => { if (pend && !introOn) { canvas.classList.toggle('hov', !!pick(pend)); pend = null; } }, 90);
   }
+  let wakeUntil = performance.now() + 3000, idleFrames = 0;
+  const wake = (ms = 1500) => { wakeUntil = Math.max(wakeUntil, performance.now() + ms); idleFrames = 0; };
+  for (const ev of ['scroll', 'pointermove', 'pointerdown', 'resize', 'keydown']) addEventListener(ev, () => wake(), { passive: true });
   addEventListener('scroll', () => { if (focusKey && Math.abs(scrollY - focusScroll) > 140) unfocus(); }, { passive: true });
 
   // ---- intro flight ----
@@ -257,7 +261,12 @@ export async function start(ui) {
   let hudLast = -1;
 
   function frame() {
-    timer.update(); const dt = Math.min(0.1, timer.getDelta()), t = timer.getElapsed();
+    timer.update();
+    // idle: nothing scrolls, the camera has arrived and the dims are drawn → stop rendering to save battery
+    if (!introOn && performance.now() > wakeUntil && Math.abs(stationFromScroll() - s) < 1e-3 && camPos.distanceToSquared(tgtPos) < 1e-6) {
+      if (++idleFrames > 90) return;
+    } else idleFrames = 0;
+    const dt = Math.min(0.1, timer.getDelta()), t = timer.getElapsed();
     const target = stationFromScroll();
     s = rm ? target : s + (target - s) * Math.min(1, dt * 3.5);
 
